@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>XpoacVanilla | Чистое ванильное выживание 1.21.4</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A2026;
+            color: #e0e4e8;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #282828;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #57A2E8;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .accent {
+            color: #57A2E8;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #57A2E8;
+            color: #1A2026;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: 0.25s ease;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(87, 162, 232, 0.2);
+        }
+        .btn i {
+            font-size: 1.1rem;
+        }
+        .btn:hover {
+            background: #3f8ad0;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 26px rgba(87, 162, 232, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #57A2E8;
+            color: #57A2E8;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: #57A2E8;
+            color: #1A2026;
+            transform: translateY(-3px);
+        }
+
+        /* LIQUID GLASS NAVBAR */
+        .glass-nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .liquid-glass-nav {
+            background: rgba(40, 40, 40, 0.55);
+            backdrop-filter: blur(16px);
+            border-radius: 80px;
+            padding: 12px 32px;
+            display: inline-flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(87, 162, 232, 0.35);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(87, 162, 232, 0.2) inset;
+            transition: all 0.3s ease;
+        }
+        .liquid-glass-nav a {
+            color: #f0f4fa;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 8px 6px;
+            transition: 0.2s;
+            letter-spacing: 0.3px;
+            position: relative;
+        }
+        .liquid-glass-nav a:hover {
+            color: #57A2E8;
+            transform: translateY(-2px);
+        }
+        .liquid-glass-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #57A2E8;
+            transition: width 0.25s;
+            border-radius: 2px;
+        }
+        .liquid-glass-nav a:hover::after {
+            width: 100%;
+        }
+        .nav-logo-mini {
+            font-weight: 800;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #57A2E8, #8bc4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-right: 8px;
+        }
+        @media (max-width: 780px) {
+            .liquid-glass-nav {
+                gap: 1.2rem;
+                padding: 10px 20px;
+                border-radius: 60px;
+            }
+            .liquid-glass-nav a {
+                font-size: 0.85rem;
+            }
+            .nav-logo-mini {
+                font-size: 1rem;
+            }
+        }
+
+        /* HERO SECTION с фоновым изображением */
+        .hero {
+            padding: 60px 0 80px;
+            position: relative;
+            background-color: #1A2026;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: 1;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 32, 38, 0.78);
+            z-index: -1;
+        }
+        .hero-grid {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-content {
+            flex: 1;
+            min-width: 280px;
+        }
+        .hero-badge {
+            background: rgba(87, 162, 232, 0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #57A2E8;
+            margin-bottom: 24px;
+        }
+        .hero-content h1 {
+            font-size: 3.3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #e0e6ee;
+            max-width: 550px;
+            margin-bottom: 36px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .server-ip {
+            background: rgba(40, 40, 40, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: 1px solid #57A2E8;
+            flex-wrap: wrap;
+        }
+        .server-ip i {
+            color: #57A2E8;
+            font-size: 1.3rem;
+        }
+        .copy-btn {
+            background: #57A2E8;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #1A2026;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 32px;
+        }
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #57A2E8;
+        }
+        .hero-visual {
+            flex: 1;
+            text-align: center;
+            background: rgba(40, 40, 40, 0.5);
+            border-radius: 42px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+            border: 1px solid #2e3a42;
+        }
+        .hero-visual i {
+            font-size: 9rem;
+            color: #57A2E8;
+            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));
+        }
+
+        /* TELEGRAM ACCESS NOTICE */
+        .telegram-notice {
+            background: linear-gradient(135deg, rgba(87, 162, 232, 0.15), rgba(40, 40, 40, 0.8));
+            border-left: 4px solid #57A2E8;
+            border-radius: 20px;
+            padding: 18px 28px;
+            margin-top: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(4px);
+        }
+        .telegram-notice i {
+            font-size: 2rem;
+            color: #57A2E8;
+        }
+        .telegram-notice span {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .telegram-notice a {
+            color: #57A2E8;
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 1px dashed #57A2E8;
+        }
+        .telegram-notice a:hover {
+            color: #8bc4ff;
+        }
+
+        .section {
+            padding: 90px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        .section-sub {
+            text-align: center;
+            color: #9aa8b5;
+            max-width: 650px;
+            margin: 0 auto 60px auto;
+        }
+
+        /* FEATURES CARDS */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+        .feature-card {
+            background: #282828;
+            border-radius: 28px;
+            padding: 32px 24px;
+            transition: all 0.25s ease;
+            border: 1px solid #3a424a;
+            text-align: center;
+            transform: translateY(0);
+        }
+        .feature-card:hover {
+            border-color: #57A2E8;
+            box-shadow: 0 10px 25px -5px rgba(87, 162, 232, 0.25);
+            background: #2d2f33;
+            transform: translateY(0);
+        }
+        .feature-icon {
+            background: rgba(87, 162, 232, 0.12);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            margin: 0 auto 24px auto;
+        }
+        .feature-icon i {
+            font-size: 2.6rem;
+            color: #57A2E8;
+        }
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+        }
+        .feature-card p {
+            color: #b9c2cc;
+        }
+
+        /* VANILLA SURVIVAL */
+        .vanilla-showcase {
+            background: linear-gradient(145deg, #282828, #22272e);
+            border-radius: 48px;
+            padding: 50px 40px;
+            text-align: center;
+            border: 1px solid #57A2E8;
+            margin: 30px 0;
+        }
+        .vanilla-icon {
+            font-size: 4rem;
+            color: #57A2E8;
+            margin-bottom: 20px;
+        }
+        .vanilla-showcase h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .vanilla-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            margin: 32px 0;
+        }
+        .vanilla-features span {
+            background: #1A2026;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .vanilla-features i {
+            color: #57A2E8;
+        }
+
+        /* TEAM SECTION — 3 PNG, без дополнительного текста */
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 45px;
+            margin-top: 40px;
+        }
+        .team-card {
+            background: #282828;
+            border-radius: 32px;
+            width: 280px;
+            transition: 0.25s ease;
+            border: 2px solid #3e464f;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+        }
+        .team-card:hover {
+            border-color: #57A2E8;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(87, 162, 232, 0.3);
+        }
+        .team-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: 0.2s;
+        }
+        @media (max-width: 700px) {
+            .team-card {
+                width: 260px;
+            }
+        }
+        @media (max-width: 580px) {
+            .team-card {
+                width: 280px;
+            }
+        }
+
+        /* IP SECTION */
+        .ip-section {
+            background: #282828;
+            border-radius: 50px;
+            padding: 50px 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .big-ip {
+            font-family: monospace;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: #1A2026;
+            display: inline-block;
+            padding: 18px 36px;
+            border-radius: 60px;
+            margin: 20px 0;
+            border: 1px solid #57A2E8;
+            word-break: break-all;
+        }
+        .access-rule {
+            background: rgba(87, 162, 232, 0.1);
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 25px;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* footer */
+        footer {
+            background: #282828;
+            padding: 48px 0 32px;
+            border-top: 1px solid #353e46;
+            margin-top: 40px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+        .social-icons {
+            display: flex;
+            gap: 22px;
+        }
+        .social-icons a {
+            color: #ccc;
+            font-size: 1.5rem;
+            transition: 0.2s;
+        }
+        .social-icons a:hover {
+            color: #57A2E8;
+            transform: scale(1.05);
+        }
+        @media (max-width: 750px) {
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+            .big-ip {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #57A2E8;
+            color: #1A2026;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            z-index: 999;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<!-- LIQUID GLASS NAVBAR -->
+<div class="glass-nav-wrapper">
+    <div class="liquid-glass-nav">
+        <span class="nav-logo-mini"><i class="fas fa-cube"></i> XpoacVanilla</span>
+        <a href="#features">Особенности</a>
+        <a href="#vanilla">Выживание</a>
+        <a href="#team">Команда</a>
+        <a href="#ip">Подключение</a>
+        <a href="#about">О нас</a>
+        <a href="#" id="copyIpNav" class="btn-outline" style="padding: 6px 16px; border-radius: 40px; font-size: 0.85rem;"><i class="fas fa-copy"></i> IP</a>
+    </div>
+</div>
+
+<main>
+    <!-- Hero с фоновым изображением background.png -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-crown"></i> ЧИСТОЕ VANILLA ВЫЖИВАНИЕ 1.21.4
+                    </div>
+                    <h1>Xpoac<span class="accent">Vanilla</span></h1>
+                    <p>Никаких приватов, магазинов и /tp. Только настоящий Minecraft, каким его задумали создатели. Друзья, свобода и полное погружение.</p>
+                    <div class="server-ip">
+                        <i class="fas fa-network-wired"></i>
+                        <span id="serverIpDisplay">XpoacVanilla.aternos.me:28893</span>
+                        <button class="copy-btn" id="copyIpBtn"><i class="fas fa-copy"></i> Копировать</button>
+                    </div>
+                    <div class="telegram-notice">
+                        <i class="fab fa-telegram"></i>
+                        <span>✧ Для доступа на сервер напишите <strong>@m1fiq</strong> в Telegram ✧</span>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-num">1.21.4</div>
+                            <div>версия</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-num">24/7</div>
+                            <div>поддержка</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-num">Vanilla</div>
+                            <div>геймплей</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <i class="fas fa-tree"></i>
+                    <i class="fas fa-pickaxe" style="font-size: 5rem; margin: 0 10px;"></i>
+                    <i class="fas fa-apple-alt"></i>
+                    <p style="margin-top: 20px; font-weight: 500;">🍃 Vanilla Experience 1.21.4 🍃</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Почему <span class="accent">XpoacVanilla</span></h2>
+            <div class="section-sub">Стабильность, честность и идеальный ванильный баланс</div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Анти-читерская защита</h3>
+                    <p>Надежная защита от читов и x-ray, честная игра для каждого.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3>Нулевой лаг</h3>
+                    <p>Мощное железо, 20 TPS 24/7, минимальный пинг по всему миру.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Регулярные ивенты</h3>
+                    <p>Постройки, PvP-турниры, охота на дракона — каждые выходные.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                    <h3>Живое комьюнити</h3>
+                    <p>Дискорд, голосовые каналы, ивенты от администрации и активный чат.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VANILLA SURVIVAL -->
+    <section id="vanilla">
+        <div class="container">
+            <div class="vanilla-showcase">
+                <div class="vanilla-icon"><i class="fas fa-campground"></i></div>
+                <h2>🍃 <span class="accent">Vanilla Survival 1.21.4</span> — без плагинов и приватов</h2>
+                <p style="max-width: 700px; margin: 0 auto;">Никаких /sethome, /tpa, приватов и донат-преимуществ. Только ты, твои друзья и бескрайний мир.</p>
+                <div class="vanilla-features">
+                    <span><i class="fas fa-check-circle"></i> Полная ваниль</span>
+                    <span><i class="fas fa-check-circle"></i> Без приватов</span>
+                    <span><i class="fas fa-check-circle"></i> Честная экономика</span>
+                    <span><i class="fas fa-check-circle"></i> Ивенты без модов</span>
+                </div>
+                <div style="margin-top: 30px;">
+                    <a href="#ip" class="btn"><i class="fas fa-plug"></i> Присоединиться</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM SECTION — только PNG, без подсказки -->
+    <section id="team" class="section" style="padding-top: 20px;">
+        <div class="container">
+            <h2 class="section-title">Наша <span class="accent">команда</span></h2>
+            <div class="section-sub">Лица, которые создают XpoacVanilla</div>
+            <div class="team-grid" id="teamGrid">
+                <div class="team-card">
+                    <img src="person1.png" alt="Участник команды" onerror="this.onerror=null; this.src='https://placehold.co/600x800/2a2f36/57A2E8?text=person1.png'">
+                </div>
+                <div class="team-card">
+                    <img src="person2.png" alt="Участник команды" onerror="this.onerror=null; this.src='https://placehold.co/600x800/2a2f36/57A2E8?text=person2.png'">
+                </div>
+                <div class="team-card">
+                    <img src="person3.png" alt="Участник команды" onerror="this.onerror=null; this.src='https://placehold.co/600x800/2a2f36/57A2E8?text=person3.png'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IP & Connect block -->
+    <section id="ip">
+        <div class="container">
+            <div class="ip-section">
+                <i class="fas fa-server" style="font-size: 2.5rem; color: #57A2E8;"></i>
+                <h3 style="margin: 15px 0 8px;">Начни свое ванильное приключение</h3>
+                <p>Java 1.21.4 | Чистый ванильный опыт</p>
+                <div class="big-ip" id="mainIpBlock">
+                    <i class="fas fa-cube"></i> XpoacVanilla.aternos.me:28893
+                </div>
+                <div class="access-rule">
+                    <i class="fab fa-telegram" style="color: #57A2E8; font-size: 1.3rem; margin-right: 10px;"></i>
+                    <strong style="color: #57A2E8;">Правило доступа:</strong> Напишите <strong style="background: #1A2026; padding: 4px 12px; border-radius: 20px;">@m1fiq</strong> в Telegram для получения доступа на сервер
+                </div>
+                <div style="margin-top: 25px;">
+                    <button id="copyFooterIpBtn" class="btn" style="background: #57A2E8; color: #1A2026;"><i class="fas fa-copy"></i> Скопировать IP</button>
+                    <a href="https://t.me/m1fiq" target="_blank" id="telegramLink" class="btn-outline btn" style="margin-left: 12px;"><i class="fab fa-telegram"></i> Написать @m1fiq</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.9rem; color: #8a99a8;">✨ Версия: 1.21.4 | Доступ только после обращения в Telegram ✨</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- about / community -->
+    <section id="about" class="section" style="padding-top: 20px;">
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+                <div style="flex:1; min-width: 240px;">
+                    <h2 class="section-title" style="text-align: left;">Сообщество <span class="accent">XpoacVanilla</span></h2>
+                    <p style="margin-bottom: 20px;">Уникальное ванильное комьюнити. Строй, исследуй и становись частью лучшего сервера. Доступ открывается через Telegram — свяжитесь с @m1fiq, чтобы присоединиться.</p>
+                    <div><i class="fas fa-users" style="color:#57A2E8;"></i> Активный Telegram и Discord<br>
+                    <i class="fas fa-gavel" style="color:#57A2E8;"></i> Прозрачная модерация 24/7</div>
+                    <a href="https://t.me/m1fiq" target="_blank" class="btn" style="margin-top: 28px;"><i class="fab fa-telegram"></i> Связаться с @m1fiq</a>
+                </div>
+                <div style="flex:1; background: #282828; border-radius: 40px; padding: 32px; text-align: center;">
+                    <i class="fas fa-quote-left" style="font-size: 2rem; color:#57A2E8; opacity: 0.7;"></i>
+                    <p style="font-size: 1.1rem; margin: 20px 0; font-style: italic;">"Наконец-то настоящая ваниль 1.21.4 без лишних плагинов. Админ @m1fiq всегда поможет с доступом!"</p>
+                    <div style="font-weight: bold;">— VanillaCrafter</div>
+                    <div style="color:#57A2E8;">активный игрок</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div>
+                <div class="logo" style="font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #57A2E8, #8bc4ff); -webkit-background-clip: text; background-clip: text; color: transparent;">Xpoac<span class="accent">Vanilla</span></div>
+                <p style="margin-top: 8px;">© 2025 Чистое ванильное выживание 1.21.4</p>
+                <p style="font-size: 0.8rem;">Доступ по обращению в Telegram @m1fiq</p>
+            </div>
+            <div class="social-icons">
+                <a href="https://t.me/m1fiq" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="#" aria-label="Discord" id="discordFooter"><i class="fab fa-discord"></i></a>
+                <a href="#" aria-label="VK"><i class="fab fa-vk"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div id="toastMessage" class="toast-msg">✅ IP скопирован!</div>
+
+<script>
+    (function() {
+        const IP_ADDRESS = "XpoacVanilla.aternos.me:28893";
+
+        const copyBtn = document.getElementById('copyIpBtn');
+        const copyFooterBtn = document.getElementById('copyFooterIpBtn');
+        const copyNav = document.getElementById('copyIpNav');
+        const toast = document.getElementById('toastMessage');
+
+        function showToast(message = "✅ IP скопирован!") {
+            toast.textContent = message;
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 2000);
+        }
+
+        function copyIPToClipboard() {
+            navigator.clipboard.writeText(IP_ADDRESS).then(() => {
+                showToast("✅ IP " + IP_ADDRESS + " скопирован!");
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = IP_ADDRESS;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast("✅ IP скопирован");
+            });
+        }
+
+        if(copyBtn) copyBtn.addEventListener('click', copyIPToClipboard);
+        if(copyFooterBtn) copyFooterBtn.addEventListener('click', copyIPToClipboard);
+        if(copyNav) copyNav.addEventListener('click', (e) => {
+            e.preventDefault();
+            copyIPToClipboard();
+        });
+
+        const mainIpBlock = document.getElementById('mainIpBlock');
+        if(mainIpBlock) {
+            mainIpBlock.style.cursor = "pointer";
+            mainIpBlock.addEventListener('click', copyIPToClipboard);
+        }
+
+        const discordFooter = document.getElementById('discordFooter');
+        if(discordFooter) {
+            discordFooter.addEventListener('click', (e) => {
+                e.preventDefault();
+                showToast("📢 Для доступа в Discord напишите @m1fiq в Telegram");
+                setTimeout(() => {
+                    window.open('https://t.me/m1fiq', '_blank');
+                }, 500);
+            });
+        }
+
+        const otherSocials = document.querySelectorAll('.social-icons a:not([aria-label="Telegram"]):not([aria-label="Discord"])');
+        otherSocials.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showToast("🌐 Свяжитесь с @m1fiq для получения ссылок на соцсети");
+            });
+        });
+    })();
+</script>
+</body>
+</html>
